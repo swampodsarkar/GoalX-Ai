@@ -94,7 +94,7 @@ export default function Leaderboard() {
                   {/* Cash Winning Score */}
                   <div className="text-right font-mono text-xs font-black">
                     <span className={rank <= 3 ? 'text-amber-300' : 'text-slate-300'}>
-                      {item.totalWinnings.toLocaleString()} 🪙
+                      {(item.totalWinnings || 0).toLocaleString()} 🪙
                     </span>
                     {highlighted && <div className="text-[8px] text-amber-500 font-sans font-bold uppercase mt-0.5">That's You!</div>}
                   </div>

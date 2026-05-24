@@ -168,15 +168,15 @@ export default function Matches() {
                   <div className="grid grid-cols-3 gap-2 mt-1.5 pt-2 border-t border-slate-950/40 text-center font-mono text-[10px]">
                     <div className="bg-[#181829] p-1 rounded-lg border border-slate-905">
                       <span className="text-slate-500 font-sans pr-1">1</span>
-                      <strong className="text-slate-300">{m.oddsHome.toFixed(2)}</strong>
+                      <strong className="text-slate-300">{(m.oddsHome || 0).toFixed(2)}</strong>
                     </div>
                     <div className="bg-[#181829] p-1 rounded-lg border border-slate-905">
                       <span className="text-slate-500 font-sans pr-1">Draw</span>
-                      <strong className="text-slate-300">{m.oddsDraw.toFixed(2)}</strong>
+                      <strong className="text-slate-300">{(m.oddsDraw || 0).toFixed(2)}</strong>
                     </div>
                     <div className="bg-[#181829] p-1 rounded-lg border border-slate-905">
                       <span className="text-slate-500 font-sans pr-1">2</span>
-                      <strong className="text-slate-300">{m.oddsAway.toFixed(2)}</strong>
+                      <strong className="text-slate-300">{(m.oddsAway || 0).toFixed(2)}</strong>
                     </div>
                   </div>
                 </div>

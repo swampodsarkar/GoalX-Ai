@@ -108,7 +108,7 @@ export default function MyBets() {
                       {bet.homeTeam} <span className="text-[10px] text-amber-500">vs</span> {bet.awayTeam}
                     </h4>
                     <p className="text-[10px] text-slate-400 font-sans mt-1.5 leading-none">
-                      Wager Target: <strong className="text-slate-200">{getSelectionName(bet.selection)}</strong> (odds: {bet.odds.toFixed(2)})
+                      Wager Target: <strong className="text-slate-200">{getSelectionName(bet.selection)}</strong> (odds: {(bet.odds || 0).toFixed(2)})
                     </p>
                   </div>
 
@@ -120,14 +120,14 @@ export default function MyBets() {
                 <div className="grid grid-cols-2 gap-2 mt-1 pt-2 border-t border-slate-950/40 text-[10px] font-mono">
                   <div className="bg-slate-950/30 border border-slate-900 p-2 rounded-lg flex flex-col">
                     <span className="text-slate-500 font-sans text-[8px] uppercase tracking-wide">Coins Stake</span>
-                    <strong className="text-slate-300 mt-0.5 text-xs">{bet.stake.toLocaleString()} 🪙</strong>
+                    <strong className="text-slate-300 mt-0.5 text-xs">{(bet.stake || 0).toLocaleString()} 🪙</strong>
                   </div>
                   <div className="bg-slate-950/30 border border-slate-900 p-2 rounded-lg flex flex-col text-right">
                     <span className="text-slate-500 font-sans text-[8px] uppercase tracking-wide text-right">
                       {bet.status === 'WON' ? 'Winnings Received' : 'Potential Return'}
                     </span>
                     <strong className={`mt-0.5 text-xs ${bet.status === 'WON' ? 'text-emerald-400 font-black' : 'text-amber-400'}`}>
-                      {bet.potentialWin.toLocaleString()} 🪙
+                      {(bet.potentialWin || 0).toLocaleString()} 🪙
                     </strong>
                   </div>
                 </div>
