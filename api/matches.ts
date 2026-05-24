@@ -1,6 +1,6 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
+import { IncomingMessage, ServerResponse } from 'http';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: IncomingMessage, res: ServerResponse) {
   try {
     const comps = ['WC', 'CL', 'BL1', 'DED', 'BSA', 'PD', 'FL1', 'ELC', 'PPL', 'EC', 'SA', 'PL'];
     const today = new Date();
@@ -55,9 +55,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       };
     });
 
-    res.json(formattedMatches.slice(0, 120));
+    const body = JSON.stringify(formattedMatches.slice(0, 120));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(body);
   } catch (err: any) {
     console.error(err);
-    res.status(500).json({ error: err.message });
+    const body = JSON.stringify({ error: err.message });
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(body);
   }
 }
