@@ -29,6 +29,8 @@ export default function App() {
     const tg = window.Telegram?.WebApp
     const initData = tg?.initData || ''
     if (!initData) {
+      const testUser = { telegramId: 123456789, username: 'TestUser', firstName: 'Test', balance: 5000, totalBets: 0, totalWins: 0, totalDeposited: 0, totalWon: 0, vip: false, vipExpiry: null, dailyStreak: 2, lastDailyClaim: Date.now() - 3600000, lastSpin: 0, referralEarnings: 0, referralCount: 0, level: { level: 1, title: 'Bronze', minBets: 0, maxBets: 50, bonusPercent: 0 }, banned: false, flagged: false, referralLink: '' }
+      setUser(testUser)
       setLoading(false)
       return
     }
