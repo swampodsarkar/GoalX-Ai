@@ -1,7 +1,6 @@
 {
-  "rootDirectory": "tma",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
+  "buildCommand": "cd tma && npm install && npm run build",
+  "outputDirectory": "tma/dist",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
