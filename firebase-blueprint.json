@@ -1,0 +1,219 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Represents a user connected via Telegram",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Telegram ID of the user"
+        },
+        "username": {
+          "type": "string",
+          "description": "Telegram username or display name"
+        },
+        "balance": {
+          "type": "number",
+          "description": "Platform balance in virtual coins"
+        },
+        "vipLevel": {
+          "type": "string",
+          "enum": ["Bronze", "Silver", "Gold", "Platinum"],
+          "description": "VIP Tier based on total bets"
+        },
+        "totalBetsCount": {
+          "type": "number",
+          "description": "Total count of bets placed"
+        },
+        "totalBetsAmount": {
+          "type": "number",
+          "description": "Aggregated amount of stake across all bets"
+        },
+        "totalWinnings": {
+          "type": "number",
+          "description": "Aggregated amount of won coins"
+        },
+        "dailyStreak": {
+          "type": "number",
+          "description": "Consecutive daily reward checkins"
+        },
+        "lastDailyRewardTimestamp": {
+          "type": "string",
+          "description": "ISO timestamp of last daily reward claim"
+        },
+        "lastSpinTimestamp": {
+          "type": "string",
+          "description": "ISO timestamp of last spin"
+        },
+        "referredBy": {
+          "type": "string",
+          "description": "Telegram ID of referring user"
+        },
+        "referralEarnings": {
+          "type": "number",
+          "description": "Commission earned from referred players' bets"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["id", "username", "balance", "vipLevel", "totalBetsCount", "dailyStreak"]
+    },
+    "Match": {
+      "title": "Football Match",
+      "description": "A scheduled or running football match with team names, scores, odds, and predictions",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "homeTeam": {
+          "type": "string"
+        },
+        "awayTeam": {
+          "type": "string"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["UPCOMING", "LIVE", "FINISHED"]
+        },
+        "homeScore": {
+          "type": "number"
+        },
+        "awayScore": {
+          "type": "number"
+        },
+        "oddsHome": {
+          "type": "number"
+        },
+        "oddsAway": {
+          "type": "number"
+        },
+        "oddsDraw": {
+          "type": "number"
+        },
+        "predictionHomeWinProb": {
+          "type": "number"
+        },
+        "predictionAwayWinProb": {
+          "type": "number"
+        },
+        "predictionDrawProb": {
+          "type": "number"
+        },
+        "aiAnalysis": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "homeTeam", "awayTeam", "startTime", "status", "oddsHome", "oddsAway", "oddsDraw"]
+    },
+    "Bet": {
+      "title": "Match Bet",
+      "description": "A match outcome wager placed by a user",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "matchId": {
+          "type": "string"
+        },
+        "selection": {
+          "type": "string",
+          "enum": ["1", "X", "2"]
+        },
+        "odds": {
+          "type": "number"
+        },
+        "stake": {
+          "type": "number"
+        },
+        "potentialWin": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["PENDING", "WON", "LOST"]
+        },
+        "createdAt": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "userId", "matchId", "selection", "odds", "stake", "potentialWin", "status", "createdAt"]
+    },
+    "Transaction": {
+      "title": "User Transaction",
+      "description": "Track balance alterations like deposit, withdrawal, rewards",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["DEPOSIT", "WITHDRAW", "DAILY_REWARD", "SPIN_REWARD", "REFERRAL_BONUS"]
+        },
+        "amount": {
+          "type": "number"
+        },
+        "timestamp": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "userId", "type", "amount", "timestamp"]
+    },
+    "SpinHistory": {
+      "title": "Spin Wheel Action",
+      "description": "Maintains log of historical spinning actions",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "reward": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "userId", "reward", "timestamp"]
+    }
+  },
+  "firestore": {
+    "users/{telegramId}": {
+      "schema": "User",
+      "description": "User profile keyed by Telegram ID"
+    },
+    "matches/{matchId}": {
+      "schema": "Match",
+      "description": "All scheduled, live, or concluded football fixtures"
+    },
+    "bets/{betId}": {
+      "schema": "Bet",
+      "description": "Wagers placed on specific matches"
+    },
+    "transactions/{txnId}": {
+      "schema": "Transaction",
+      "description": "User's financial transactions log"
+    },
+    "spinHistory/{spinId}": {
+      "schema": "SpinHistory",
+      "description": "Log of daily spin rewards"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Telegram Football Betting Mini App with AI Predictions",
+  "description": "A feature-rich football match betting mini app for Telegram with AI predictions, daily rewards, spin wheel, leaderboard, referrals, and a virtual wallet.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

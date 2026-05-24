@@ -1,0 +1,11 @@
+{
+  "projectId": "gen-z-airdrop",
+  "appId": "1:1056087088959:web:df554d67b66f2a41f2bd8a",
+  "apiKey": "AIzaSyDGNViyZeGpGQDfpy1CKsrxWZPExRhH2VQ",
+  "authDomain": "gen-z-airdrop.firebaseapp.com",
+  "databaseURL": "https://gen-z-airdrop-default-rtdb.asia-southeast1.firebasedatabase.app",
+  "firestoreDatabaseId": "ai-studio-b8763373-bf82-46db-81ff-1442c56da1df",
+  "storageBucket": "gen-z-airdrop.firebasestorage.app",
+  "messagingSenderId": "1056087088959",
+  "measurementId": ""
+}

@@ -1,0 +1,135 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-\\:\\.]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Reference to a user profile to check if they own it
+    function userOwnsProfile(telegramId) {
+      return isSignedIn() && 
+        exists(/databases/$(database)/documents/users/$(telegramId)) && 
+        get(/databases/$(database)/documents/users/$(telegramId)).data.uid == request.auth.uid;
+    }
+
+    // Match Collection Rules
+
+    // 2. Users Collection
+    match /users/{telegramId} {
+      allow get, list: if isSignedIn();
+      
+      // Permit creation of user profiles with a safe, restricted default setup
+      allow create: if isSignedIn() && 
+        isValidId(telegramId) &&
+        incoming().uid == request.auth.uid &&
+        incoming().id == telegramId &&
+        incoming().username is string &&
+        incoming().username.size() >= 2 &&
+        incoming().username.size() <= 64 &&
+        incoming().balance is number &&
+        incoming().balance >= 0 &&
+        incoming().balance <= 50000 && // safe starting limit
+        incoming().vipLevel in ['Bronze', 'Silver', 'Gold', 'Platinum'] &&
+        incoming().totalBetsCount == 0 &&
+        incoming().totalBetsAmount == 0 &&
+        incoming().totalWinnings == 0 &&
+        incoming().dailyStreak >= 0 &&
+        incoming().referralEarnings == 0;
+
+      // Allow updates to user progress metrics, rewards, spin wheel, and balance
+      allow update: if isSignedIn() && 
+        existing().uid == request.auth.uid &&
+        incoming().uid == request.auth.uid &&
+        incoming().id == telegramId &&
+        incoming().balance is number &&
+        incoming().balance >= 0 &&
+        incoming().dailyStreak is number &&
+        incoming().referralEarnings is number &&
+        incoming().totalBetsCount is number &&
+        incoming().totalBetsAmount is number &&
+        incoming().totalWinnings is number &&
+        incoming().diff(existing()).affectedKeys().hasAny(['balance', 'lastDailyRewardTimestamp', 'dailyStreak', 'lastSpinTimestamp', 'vipLevel', 'totalBetsCount', 'totalBetsAmount', 'totalWinnings', 'referralEarnings', 'username']);
+
+      allow delete: if false;
+    }
+
+    // 3. Matches Collection
+    match /matches/{matchId} {
+      allow get, list: if isSignedIn();
+      
+      // Since it is a client-only serverless app, users can create/update matches details 
+      // (odds, home/away scores, status, and AI predictions) so matches are synchronized across users.
+      allow create: if isSignedIn() && isValidId(matchId) && incoming().homeTeam is string;
+      allow update: if isSignedIn() && incoming().homeTeam is string;
+      allow delete: if false;
+    }
+
+    // 4. Bets Collection
+    match /bets/{betId} {
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || userOwnsProfile(resource.data.userId));
+      allow get: if isSignedIn() && (resource.data.userId == request.auth.uid || userOwnsProfile(resource.data.userId));
+      
+      allow create: if isSignedIn() && 
+        isValidId(betId) &&
+        userOwnsProfile(incoming().userId) &&
+        incoming().stake is number && 
+        incoming().stake > 0 &&
+        incoming().odds is number &&
+        incoming().potentialWin is number &&
+        incoming().selection in ['1', 'X', '2'] &&
+        incoming().status == 'PENDING';
+        
+      allow update: if isSignedIn() && 
+        userOwnsProfile(existing().userId) &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['status', 'potentialWin']);
+
+      allow delete: if false;
+    }
+
+    // 5. Transactions Collection
+    match /transactions/{txnId} {
+      allow list: if isSignedIn() && userOwnsProfile(resource.data.userId);
+      allow get: if isSignedIn() && userOwnsProfile(resource.data.userId);
+
+      allow create: if isSignedIn() && 
+        isValidId(txnId) &&
+        userOwnsProfile(incoming().userId) &&
+        incoming().amount is number &&
+        incoming().type in ['DEPOSIT', 'WITHDRAW', 'DAILY_REWARD', 'SPIN_REWARD', 'REFERRAL_BONUS'];
+
+      allow update, delete: if false;
+    }
+
+    // 6. SpinHistory Collection
+    match /spinHistory/{spinId} {
+      allow list: if isSignedIn() && userOwnsProfile(resource.data.userId);
+      allow get: if isSignedIn() && userOwnsProfile(resource.data.userId);
+
+      allow create: if isSignedIn() && 
+        isValidId(spinId) &&
+        userOwnsProfile(incoming().userId) &&
+        incoming().reward is string;
+
+      allow update, delete: if false;
+    }
+  }
+}
