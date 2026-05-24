@@ -57,13 +57,13 @@ export default function Profile() {
         
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center font-extrabold text-2xl text-slate-100 shadow-md">
-            {user.username.substring(0,1).toUpperCase()}
+            {(user.username || '?').substring(0,1).toUpperCase()}
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-base font-extrabold text-slate-100">@{user.username}</h3>
               <span className={`px-2 py-0.5 rounded-full text-[8px] font-sans font-extrabold bg-gradient-to-tr border shadow ${getVipBadgeColor(user.vipLevel)}`}>
-                {user.vipLevel.toUpperCase()}
+                {(user.vipLevel || '').toUpperCase()}
               </span>
             </div>
             <p className="text-[9px] text-slate-500 font-mono mt-1">TELEGRAM ID: {user.id}</p>

@@ -45,7 +45,7 @@ export default function Home() {
 
   // Helper to extract styled team bubbles
   const findTeamDetail = (teamName: string) => {
-    return TEAMS.find(t => t.name === teamName) || { short: teamName.substring(0, 3).toUpperCase(), bg: '#1e293b', color: '#ffffff' };
+    return TEAMS.find(t => t.name === teamName) || { short: (teamName || '').substring(0, 3).toUpperCase(), bg: '#1e293b', color: '#ffffff' };
   };
 
   if (initError) {
@@ -84,7 +84,7 @@ export default function Home() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-lg text-slate-100 border border-slate-700">
-              {user.username.substring(0,1).toUpperCase()}
+              {(user.username || '?').substring(0,1).toUpperCase()}
             </div>
             <div>
               <p className="text-slate-400 text-xs font-semibold leading-none">Welcome back,</p>
@@ -94,7 +94,7 @@ export default function Home() {
           
           {/* VIP Badge */}
           <div className={`px-2.5 py-0.5 rounded-full text-[10px] font-sans font-extrabold bg-gradient-to-tr border shadow ${getVipBadgeColor(user.vipLevel)}`}>
-            {user.vipLevel.toUpperCase()}
+            {(user.vipLevel || '').toUpperCase()}
           </div>
         </div>
 

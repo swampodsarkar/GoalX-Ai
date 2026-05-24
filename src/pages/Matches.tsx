@@ -14,7 +14,7 @@ export default function Matches() {
 
   // Extract color pairings
   const findTeamDetail = (teamName: string) => {
-    return TEAMS.find(t => t.name === teamName) || { short: teamName.substring(0, 3).toUpperCase(), bg: '#1e293b', color: '#ffffff' };
+    return TEAMS.find(t => t.name === teamName) || { short: (teamName || '').substring(0, 3).toUpperCase(), bg: '#1e293b', color: '#ffffff' };
   };
 
   const filteredMatches = matches.filter(m => {
@@ -98,7 +98,7 @@ export default function Matches() {
                   {/* Match Metadata header */}
                   <div className="flex items-center justify-between text-[8px] font-mono font-bold text-slate-400">
                     <span className="bg-slate-900 px-2 py-0.5 rounded-full border border-slate-800/80">
-                      ID: {m.id.toUpperCase()}
+                      ID: {(m.id || '').toUpperCase()}
                     </span>
                     <span>
                       {filter === 'FINISHED' ? 'CONCLUDED' : new Date(m.startTime).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}

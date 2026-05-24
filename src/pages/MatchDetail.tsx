@@ -26,7 +26,7 @@ export default function MatchDetail() {
 
   // Find corresponding team detail colorings
   const findTeamDetail = (teamName: string) => {
-    return TEAMS.find(t => t.name === teamName) || { short: teamName.substring(0, 3).toUpperCase(), bg: '#1e293b', color: '#ffffff' };
+    return TEAMS.find(t => t.name === teamName) || { short: (teamName || '').substring(0, 3).toUpperCase(), bg: '#1e293b', color: '#ffffff' };
   };
 
   if (!match) {

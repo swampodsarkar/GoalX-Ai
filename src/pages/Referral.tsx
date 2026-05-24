@@ -109,7 +109,7 @@ export default function Referral() {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-slate-800 border-slate-705 flex items-center justify-center font-bold text-xs">
-                    {item.username.substring(0,1).toUpperCase()}
+                    {(item.username || '?').substring(0,1).toUpperCase()}
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-slate-200">@{item.username}</h4>
@@ -121,7 +121,7 @@ export default function Referral() {
 
                 <div className="text-right">
                   <span className="px-2 py-0.5 rounded-full text-[8px] font-sans font-extrabold bg-[#1a1a2e] text-slate-300 border border-slate-800">
-                    {item.vipLevel.toUpperCase()}
+                    {(item.vipLevel || '').toUpperCase()}
                   </span>
                   <div className="text-[8px] text-slate-400 font-mono mt-1">
                     Win stake: {item.totalBetsAmount.toLocaleString()}🪙

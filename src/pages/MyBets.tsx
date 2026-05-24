@@ -97,7 +97,7 @@ export default function MyBets() {
               >
                 {/* Header */}
                 <div className="flex justify-between items-center bg-slate-950/30 p-1.5 rounded-lg border border-slate-900 text-[9px] font-mono text-slate-400 leading-none">
-                  <span>SLIP #{bet.id.toUpperCase().substring(0, 12)}</span>
+                  <span>SLIP #{(bet.id || '').toUpperCase().substring(0, 12)}</span>
                   <span>{new Date(bet.createdAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
                 </div>
 
