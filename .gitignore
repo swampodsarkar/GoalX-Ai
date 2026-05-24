@@ -1,0 +1,7 @@
+node_modules/
+.env
+tma/node_modules/
+tma/dist/
+serviceAccountKey.json
+*.log
+.DS_Store
