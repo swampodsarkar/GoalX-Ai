@@ -9,16 +9,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(express.static('public'));
-
-app.get('/', (req, res) => {
-  res.send('GoalX AI is running.');
-});
 
 app.use('/api/tma', tmaRoutes);
 
+app.use(express.static('public'));
 app.use('/tma', express.static('public/tma'));
-app.get('/tma*', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(__dirname + '/public/tma/index.html');
 });
 
