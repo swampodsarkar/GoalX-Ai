@@ -4,7 +4,7 @@ import { Award, Gift, HelpCircle, Trophy, Globe, History, Zap, Sparkles, Trendin
 import { TEAMS } from '../utils/sportsProvider';
 
 export default function Home() {
-  const { user, matches, loading } = useApp();
+  const { user, matches, loading, initError } = useApp();
   const navigate = useNavigate();
 
   // Find VIP Status detail thresholds
@@ -47,6 +47,25 @@ export default function Home() {
   const findTeamDetail = (teamName: string) => {
     return TEAMS.find(t => t.name === teamName) || { short: teamName.substring(0, 3).toUpperCase(), bg: '#1e293b', color: '#ffffff' };
   };
+
+  if (initError) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 gap-4 px-6 text-center">
+        <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center mb-2">
+          <span className="text-2xl">⚠️</span>
+        </div>
+        <h2 className="text-lg font-bold text-red-400">Connection Error</h2>
+        <p className="text-xs text-slate-400 font-mono break-all">{initError}</p>
+        <p className="text-[10px] text-slate-500">Make sure Realtime Database is enabled in Firebase Console</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold py-2 px-6 rounded-xl text-xs transition mt-2"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   if (loading || !user) {
     return (

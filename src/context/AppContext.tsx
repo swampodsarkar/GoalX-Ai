@@ -25,6 +25,7 @@ interface AppContextProps {
   matches: Match[];
   bets: Bet[];
   loading: boolean;
+  initError: string | null;
   isTelegram: boolean;
   telegramRawUser: any;
   currentMockId: string;
@@ -88,10 +89,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [leaderboard, setLeaderboard] = useState<User[]>([]);
   const [referrals, setReferrals] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [initError, setInitError] = useState<string | null>(null);
   const [isTelegram, setIsTelegram] = useState(false);
   const [telegramRawUser, setTelegramRawUser] = useState<any>(null);
   const [currentMockId, setCurrentMockId] = useState('mock_user_777');
   const [currentMockUsername, setCurrentMockUsername] = useState('FootballWarlock');
+
+  // Safety timeout - if loading takes >20s, show fallback
+  useEffect(() => {
+    const timeout = setTimeout(() => setLoading(false), 20000);
+    return () => clearTimeout(timeout);
+  }, []);
 
   // Load Telegram SDK and authorize
   useEffect(() => {
@@ -133,8 +141,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      // We have an authenticated Firebase user. Let's sync with Realtime DB profile.
-      await setupUserProfile(tId, tUsername, currentAuthUser.uid);
+      try {
+        await setupUserProfile(tId, tUsername, currentAuthUser.uid);
+      } catch (err: any) {
+        console.error("Failed to setup user profile:", err);
+        setInitError(err?.message || "Failed to connect to database");
+        setLoading(false);
+      }
     });
 
     return () => unsubscribeAuth();
@@ -344,7 +357,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setCurrentMockId(mockId);
     setCurrentMockUsername(mockUsername);
     if (auth.currentUser) {
-      await setupUserProfile(mockId, mockUsername, auth.currentUser.uid);
+      try {
+        await setupUserProfile(mockId, mockUsername, auth.currentUser.uid);
+      } catch (err: any) {
+        setInitError(err?.message || "Failed to setup user profile");
+        setLoading(false);
+      }
     }
   }
 
@@ -699,6 +717,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       matches,
       bets,
       loading,
+      initError,
       isTelegram,
       telegramRawUser,
       currentMockId,
