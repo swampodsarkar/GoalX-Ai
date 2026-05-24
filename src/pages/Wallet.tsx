@@ -100,7 +100,7 @@ export default function Wallet() {
       <section className="bg-gradient-to-br from-[#121224] to-[#1c1c34] p-5 rounded-2xl border border-slate-900 text-center relative overflow-hidden">
         <span className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-none">Your Virtual Coin Balance</span>
         <h3 className="text-4xl font-extrabold text-amber-300 tracking-tight mt-1 mb-2">
-          {user.balance.toLocaleString()} <span className="text-lg font-normal text-amber-500">🪙</span>
+          {(user.balance || 0).toLocaleString()} <span className="text-lg font-normal text-amber-500">🪙</span>
         </h3>
         <p className="text-[9px] text-[#8e8ec8] leading-tight">These are virtual platform credits. Use deposit inputs to reload and keep betting!</p>
       </section>
@@ -182,7 +182,7 @@ export default function Wallet() {
 
                 <div className="text-right font-mono text-xs font-extrabold">
                   <span className={item.type === 'WITHDRAW' ? 'text-rose-400' : 'text-emerald-400'}>
-                    {item.type === 'WITHDRAW' ? '-' : '+'}{item.amount.toLocaleString()} 🪙
+                    {item.type === 'WITHDRAW' ? '-' : '+'}{(item.amount || 0).toLocaleString()} 🪙
                   </span>
                   <div className="text-[8px] text-slate-400 font-normal">Completed</div>
                 </div>

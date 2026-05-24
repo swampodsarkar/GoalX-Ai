@@ -114,7 +114,7 @@ export default function GlobalHistory() {
                   </div>
 
                   <strong className={`font-mono text-xs ${item.type === 'WITHDRAW' ? 'text-rose-400' : 'text-emerald-400'}`}>
-                    {item.type === 'WITHDRAW' ? '-' : '+'}{item.amount.toLocaleString()} 🪙
+                    {item.type === 'WITHDRAW' ? '-' : '+'}{(item.amount || 0).toLocaleString()} 🪙
                   </strong>
                 </div>
               ))}
